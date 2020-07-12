@@ -64,12 +64,12 @@ namespace devMobile.IoT.Rak811.ShieldSerial
                byte[] txBuffer = UTF8Encoding.UTF8.GetBytes(ATCommand);
 
                int txByteCount = serialDevice.Write(txBuffer);
-               Debug.WriteLine($"TX: {txByteCount} bytes ");// via {serialDevice.Provider.}");
+               Debug.WriteLine($"TX: {txByteCount} bytes");
 
 #if SERIAL_SYNC_READ
                while( serialDevice.BytesToWrite>0)
                {
-                  Debug.WriteLine($"BytesToWrite {serialDevice.BytesToWrite}");
+                  Debug.WriteLine($" BytesToWrite {serialDevice.BytesToWrite}");
                   Thread.Sleep(100);
                }
 
@@ -80,8 +80,7 @@ namespace devMobile.IoT.Rak811.ShieldSerial
 
                   serialDevice.Read(rxBuffer);
 
-                  Debug.WriteLine($"RXs :{rxByteCount} bytes read");// from {serialDevice.PortName}");
-
+                  Debug.WriteLine($"RX sync:{rxByteCount} bytes read");
                   String response = UTF8Encoding.UTF8.GetString(rxBuffer);
                   Debug.WriteLine($"RX sync:{response}");
                }
@@ -104,8 +103,8 @@ namespace devMobile.IoT.Rak811.ShieldSerial
 
          serialDevice.Read(rxBuffer, 0, e.Count);
 
+         Debug.WriteLine($"RX Async:{e.Count} bytes read");
          String response = UTF8Encoding.UTF8.GetString(rxBuffer);
-
          Debug.WriteLine($"RX Async:{response}");
       }
 #endif
