@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.30225.117
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "00.ShieldSerial", "ShieldSerial\00.ShieldSerial.csproj", "{9AA7BBEA-CD8F-45FE-B5B1-E46D824D770D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetworkJoinOTAA", "NetworkJoinOTAA\NetworkJoinOTAA.csproj", "{BA7ACFE2-46DA-44A8-845D-89B4AD5B2C12}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "01.NetworkJoinOTAA", "NetworkJoinOTAA\01.NetworkJoinOTAA.csproj", "{BA7ACFE2-46DA-44A8-845D-89B4AD5B2C12}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
