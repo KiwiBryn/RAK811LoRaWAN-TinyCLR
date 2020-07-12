@@ -15,7 +15,8 @@
 //
 //---------------------------------------------------------------------------------
 #define TINYCLR_V2_FEZDUINO 
-//#define SERIAL_SYNC_READ
+#define SERIAL_SYNC_READ
+//#define SERIAL_ASYNC_READ
 namespace devMobile.IoT.Rak811.ShieldSerial
 {
    using System;
@@ -24,7 +25,6 @@ namespace devMobile.IoT.Rak811.ShieldSerial
    using GHIElectronics.TinyCLR.Devices.Uart;
    using GHIElectronics.TinyCLR.Pins;
 
-   using System.Collections;
    using System.Text;
    using System.Threading;
 
@@ -55,7 +55,7 @@ namespace devMobile.IoT.Rak811.ShieldSerial
 
             serialDevice.Enable();
 
-#if !SERIAL_SYNC_READ
+#if SERIAL_ASYNC_READ
             serialDevice.DataReceived += SerialDevice_DataReceived;
 #endif
 
@@ -96,7 +96,7 @@ namespace devMobile.IoT.Rak811.ShieldSerial
       }
 
 
-#if !SERIAL_SYNC_READ
+#if SERIAL_ASYNC_READ
       private static void SerialDevice_DataReceived(UartController sender, DataReceivedEventArgs e)
       {
          byte[] rxBuffer = new byte[e.Count];
