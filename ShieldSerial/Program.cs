@@ -12,11 +12,10 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-//
+// must have one of 
+//    TINYCLR_V2_FEZDUINO or
+//    SERIAL_SYNC_READ or SERIAL_ASYNC_READ defined
 //---------------------------------------------------------------------------------
-#define TINYCLR_V2_FEZDUINO 
-#define SERIAL_SYNC_READ
-//#define SERIAL_ASYNC_READ
 namespace devMobile.IoT.Rak811.ShieldSerial
 {
    using System;
@@ -95,13 +94,12 @@ namespace devMobile.IoT.Rak811.ShieldSerial
          }
       }
 
-
 #if SERIAL_ASYNC_READ
       private static void SerialDevice_DataReceived(UartController sender, DataReceivedEventArgs e)
       {
          byte[] rxBuffer = new byte[e.Count];
 
-         serialDevice.Read(rxBuffer, 0, e.Count);
+         sender.Read(rxBuffer, 0, e.Count);
 
          Debug.WriteLine($"RX Async:{e.Count} bytes read");
          String response = UTF8Encoding.UTF8.GetString(rxBuffer);
