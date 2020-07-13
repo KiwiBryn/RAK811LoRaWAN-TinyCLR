@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "00.ShieldSerial", "ShieldSe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "01.NetworkJoinOTAA", "NetworkJoinOTAA\01.NetworkJoinOTAA.csproj", "{BA7ACFE2-46DA-44A8-845D-89B4AD5B2C12}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RAK811LoRaWANDevice", "RAK811LoRaWANDevice\RAK811LoRaWANDevice.csproj", "{89186652-A7AD-44D6-9334-24E3E302299D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RAK811LoRaWANDeviceClient", "RAK811LoRaWANDeviceClient\RAK811LoRaWANDeviceClient.csproj", "{991C774D-1501-44B3-B386-98F2AB51108A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,6 +29,16 @@ Global
 		{BA7ACFE2-46DA-44A8-845D-89B4AD5B2C12}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BA7ACFE2-46DA-44A8-845D-89B4AD5B2C12}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BA7ACFE2-46DA-44A8-845D-89B4AD5B2C12}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{89186652-A7AD-44D6-9334-24E3E302299D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89186652-A7AD-44D6-9334-24E3E302299D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89186652-A7AD-44D6-9334-24E3E302299D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89186652-A7AD-44D6-9334-24E3E302299D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{991C774D-1501-44B3-B386-98F2AB51108A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{991C774D-1501-44B3-B386-98F2AB51108A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{991C774D-1501-44B3-B386-98F2AB51108A}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{991C774D-1501-44B3-B386-98F2AB51108A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{991C774D-1501-44B3-B386-98F2AB51108A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{991C774D-1501-44B3-B386-98F2AB51108A}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
