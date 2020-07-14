@@ -672,15 +672,15 @@ namespace devMobile.IoT.LoRaWan
 
       private void SerialDevice_DataReceived(UartController sender, DataReceivedEventArgs e)
       {
-         byte[] rxBuffer = new byte[e.Count];
-
-         // read all available bytes from the Serial Device input stream
-         sender.Read(rxBuffer, 0, e.Count);
-
          if (e.Count == 0)
          {
             return;
          }
+
+         byte[] rxBuffer = new byte[e.Count];
+
+         // read all available bytes from the Serial Device input stream
+         sender.Read(rxBuffer, 0, e.Count);
 
          response.Append(UTF8Encoding.UTF8.GetString(rxBuffer));
 
