@@ -145,8 +145,6 @@ namespace devMobile.IoT.Rak811LoRaWanDeviceClient
                while (true)
                {
 #if PAYLOAD_BCD
-                  // BHL
-                  //Debug.WriteLine($"{DateTime.UtcNow:hh:mm:ss} Send Timeout:{SendTimeout:hh:mm:ss} port:{MessagePort} payload BCD:{PayloadBcd}");
                   Debug.WriteLine($"{DateTime.UtcNow:hh:mm:ss} port:{MessagePort} payload BCD:{PayloadBcd}");
                   result = device.Send(MessagePort, PayloadBcd, SendTimeout);
 #endif
@@ -170,7 +168,7 @@ namespace devMobile.IoT.Rak811LoRaWanDeviceClient
                      return;
                   }
 
-                  Thread.Sleep(5000);
+                  Thread.Sleep(30000);
 
                   Debug.WriteLine($"{DateTime.UtcNow:hh:mm:ss} Wakeup");
                   result = device.Wakeup();
