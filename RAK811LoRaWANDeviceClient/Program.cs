@@ -51,7 +51,7 @@ namespace devMobile.IoT.Rak811LoRaWanDeviceClient
       private static readonly TimeSpan SendTimeout = new TimeSpan(0, 0, 10);
       private const byte MessagePort = 1;
 #if PAYLOAD_BCD
-      private const string PayloadBcd = "48656c6c6f204c6f526157414e"; // Hello LoRaWAN in BCD
+      private const string PayloadBcd = "54696e79434c52204c6f526157414e"; // TinyCLR LoRaWAN in BCD
 #endif
 #if PAYLOAD_BYTES
       private static readonly byte[] PayloadBytes = { 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x20, 0x4c, 0x6f, 0x52, 0x61, 0x57, 0x41, 0x4e}; // Hello LoRaWAN in bytes
