@@ -8,3 +8,11 @@ The repo has the source code for the series of blog posts written as I built thi
 
 ![RAK811 EVB on Fezduino device](FezduinoWisnodeV1.jpg)
 
+I used a local [RAK7246 LPWAN Developer Gateway](https://www.rakwireless.com/en-us/products/lpwan-gateways-and-concentrators/rak7246g) connected to [The Things Network](https://www.thethingsnetwork.org/) to test my implementation.
+
+[RAK811 LPWAN Evaluation Board based device](https://store.rakwireless.com/products/rak811-lpwan-evaluation-board) connecting to the [The Things Network](https://www.thethingsnetwork.org/)
+![Connecting to The Things Network](TinyCLRV2TTNOTAALogging.JPG)
+
+[The Things Network](https://www.thethingsnetwork.org/) uplink and downlink messaging 
+![TTN Uplingk and downlink messaging](TTNLogging.JPG)
+
