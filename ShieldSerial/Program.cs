@@ -32,7 +32,13 @@ namespace devMobile.IoT.Rak811.ShieldSerial
       private static UartController serialDevice;
       private const string ATCommand = "at+version\r\n";
 #if TINYCLR_V2_FEZDUINO
-      private static string SerialPortId = SC20100.UartPort.Uart5;
+      private static readonly string SerialPortId = SC20100.UartPort.Uart5;
+#endif
+#if TINYCLR_V2_SC20100DEV_MIKROBUS_1
+      private const string SerialPortId = SC20100.UartPort.Usart2;
+#endif
+#if TINYCLR_V2_SC20100DEV_MIKROBUS_2
+      private const string SerialPortId = SC20100.UartPort.Uart3;
 #endif
 
       public static void Main()
