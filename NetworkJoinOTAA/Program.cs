@@ -14,7 +14,6 @@
 // limitations under the License.
 //
 //---------------------------------------------------------------------------------
-#define TINYCLR_V2_FEZDUINO 
 namespace devMobile.IoT.Rak811.NetworkJoinOTAA
 {
    using System;
