@@ -48,7 +48,7 @@ namespace devMobile.IoT.LoRaWan
       ATResponseTimeout,
       ATCommandUnsuported,
       ATCommandInvalidParameter,
-
+      ErrorReadingOrWritingFlash,
       LoRaBusy,
       LoRaServiceIsUnknown,
       LoRaParameterInvalid,
@@ -70,7 +70,7 @@ namespace devMobile.IoT.LoRaWan
       LoRaRX2ReceiveError,
       LoRaJoinFailed,
       LoRaDownlinkRepeated,
-      LoRaInvalidPayloadSizeForDataRate,
+      LoRaPayloadSizeNotValidForDataRate,
       LoRaTooManyDownlinkFramesLost,
       LoRaAddressFail,
       LoRaMicVerifyError,
@@ -614,7 +614,11 @@ namespace devMobile.IoT.LoRaWan
                break;
             case 3: //There is an error when reading or writing flash.
             case 4: //There is an error when reading or writing through IIC.
+               result = Result.ErrorReadingOrWritingFlash;
+               break;
             case 5: //There is an error when sending through UART
+               result = Result.ATCommandInvalidParameter;
+               break;
             case 41: //The BLE works in an invalid state, so that it can’t be operated.
                result = Result.ResponseInvalid;
                break;
@@ -634,7 +638,7 @@ namespace devMobile.IoT.LoRaWan
                result = Result.LoRaDataRateInvalid;
                break;
             case 85:
-               result = Result.LoRaInvalidPayloadSizeForDataRate;
+               result = Result.LoRaFrequencyAndDataRateInvalid;
                break;
             case 86:
                result = Result.LoRaDeviceNotJoinedNetwork;
@@ -678,8 +682,11 @@ namespace devMobile.IoT.LoRaWan
             case 99:
                result = Result.LoRaJoinFailed;
                break;
+            case 100:
+               result = Result.LoRaDownlinkRepeated;
+               break;
             case 101:
-               result = Result.LoRaInvalidPayloadSizeForDataRate;
+               result = Result.LoRaPayloadSizeNotValidForDataRate;
                break;
             case 102:
                result = Result.LoRaTooManyDownlinkFramesLost;
