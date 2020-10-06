@@ -133,7 +133,7 @@ namespace devMobile.IoT.Rak811LoRaWanDeviceClient
                }
 #endif
 
-               //Debug.WriteLine($"{DateTime.UtcNow:hh:mm:ss} Join start Timeout:{JoinTimeOut:hh:mm:ss}");
+               Debug.WriteLine($"{DateTime.UtcNow:hh:mm:ss} Join start Timeout:{JoinTimeOut.TotalSeconds} Seconds");
                result = device.Join(JoinTimeOut);
                if (result != Result.Success)
                {
