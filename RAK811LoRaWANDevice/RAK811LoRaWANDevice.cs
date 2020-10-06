@@ -139,19 +139,6 @@ namespace devMobile.IoT.LoRaWan
 
          serialDevice.DataReceived += SerialDevice_DataReceived; ;
 
-         // Set the Working mode to LoRaWAN
-#if DIAGNOSTICS
-         Debug.WriteLine($" {DateTime.UtcNow:hh:mm:ss} lora:work_mode LoRaWAN");
-#endif
-         result = SendCommand("Initialization OK", "at+set_config=lora:work_mode:0", CommandTimeoutDefault);
-         if (result != Result.Success)
-         {
-#if DIAGNOSTICS
-            Debug.WriteLine($" {DateTime.UtcNow:hh:mm:ss} lora:work_mode failed {result}");
-#endif
-            return result;
-         }
-
          return Result.Success;
       }
 
@@ -347,6 +334,19 @@ namespace devMobile.IoT.LoRaWan
             throw new ArgumentException($"appsKey invalid length must be {AppsKeyLength} characters", "appsKey");
          }
 
+         // Set the Working mode to LoRaWAN
+#if DIAGNOSTICS
+         Debug.WriteLine($" {DateTime.UtcNow:hh:mm:ss} lora:work_mode LoRaWAN");
+#endif
+         result = SendCommand("Initialization OK", "at+set_config=lora:work_mode:0", CommandTimeoutDefault);
+         if (result != Result.Success)
+         {
+#if DIAGNOSTICS
+            Debug.WriteLine($" {DateTime.UtcNow:hh:mm:ss} lora:work_mode failed {result}");
+#endif
+            return result;
+         }
+
          // Set the JoinMode to ABP
 #if DIAGNOSTICS
          Debug.WriteLine($" {DateTime.UtcNow:hh:mm:ss} lora:join_mode:1");
@@ -420,6 +420,19 @@ namespace devMobile.IoT.LoRaWan
          if (appKey.Length != AppKeyLength)
          {
             throw new ArgumentException($"appKey invalid length must be {AppKeyLength} characters", "appKey");
+         }
+
+         // Set the Working mode to LoRaWAN
+#if DIAGNOSTICS
+         Debug.WriteLine($" {DateTime.UtcNow:hh:mm:ss} lora:work_mode LoRaWAN");
+#endif
+         result = SendCommand("Initialization OK", "at+set_config=lora:work_mode:0", CommandTimeoutDefault);
+         if (result != Result.Success)
+         {
+#if DIAGNOSTICS
+            Debug.WriteLine($" {DateTime.UtcNow:hh:mm:ss} lora:work_mode failed {result}");
+#endif
+            return result;
          }
 
          // Set the JoinMode to OTAA
