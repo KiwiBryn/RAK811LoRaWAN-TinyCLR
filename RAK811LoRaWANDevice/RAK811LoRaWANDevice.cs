@@ -78,6 +78,8 @@ namespace devMobile.IoT.LoRaWan
 
    public class Rak811LoRaWanDevice : IDisposable
    {
+      public const ushort BaudRateMinimum = 1200;
+      public const ushort BaudRateMaximum = 57600;
       public const ushort RegionIDLength = 5;
       public const ushort DevEuiLength = 16;
       public const ushort AppEuiLength = 16;
@@ -91,6 +93,13 @@ namespace devMobile.IoT.LoRaWan
       public const ushort MessageBytesMaximumLength = 242;
       public const ushort MessageBcdMinimumLength = 1;
       public const ushort MessageBcdMaximumLength = 484;
+
+      public readonly TimeSpan SendTimeoutMinimum = new TimeSpan(0, 0, 1);
+      public readonly TimeSpan SendTimeoutMaximum = new TimeSpan(0, 0, 10);
+
+      public readonly TimeSpan JoinTimeoutMinimum = new TimeSpan(0, 0, 1);
+      public readonly TimeSpan JoinTimeoutMaximum = new TimeSpan(0, 0, 20);
+
 
       private const string EndOfLineMarker = "\r\n";
       private const string ErrorMarker = "ERROR:";
@@ -118,8 +127,14 @@ namespace devMobile.IoT.LoRaWan
       public Result Initialise(string serialPortId, int baudRate, UartParity serialParity, int dataBits, UartStopBitCount stopBitCount)
       {
          Result result;
-         Debug.Assert(!string.IsNullOrEmpty(serialPortId));
-         Debug.Assert(baudRate > 0);
+         if ((serialPortId == null) || (serialPortId == ""))
+         {
+            throw new ArgumentException("Invalid SerialPortId", "serialPortId");
+         }
+         if ((baudRate < BaudRateMinimum) || (baudRate > BaudRateMaximum))
+         {
+            throw new ArgumentException("Invalid BaudRate", "baudRate");
+         }
 
          serialDevice = UartController.FromName(serialPortId);
 
@@ -137,7 +152,20 @@ namespace devMobile.IoT.LoRaWan
 
          atCommandExpectedResponse = string.Empty;
 
-         serialDevice.DataReceived += SerialDevice_DataReceived; ;
+         serialDevice.DataReceived += SerialDevice_DataReceived;
+
+         // Set the Working mode to LoRaWAN
+#if DIAGNOSTICS
+         Debug.WriteLine($" {DateTime.UtcNow:hh:mm:ss} lora:work_mode LoRaWAN");
+#endif
+         result = SendCommand("Initialization OK", "at+set_config=lora:work_mode:0", CommandTimeoutDefault);
+         if (result != Result.Success)
+         {
+#if DIAGNOSTICS
+            Debug.WriteLine($" {DateTime.UtcNow:hh:mm:ss} lora:work_mode failed {result}");
+#endif
+            return result;
+         }
 
          return Result.Success;
       }
@@ -145,7 +173,10 @@ namespace devMobile.IoT.LoRaWan
       public Result Class(LoRaClass loRaClass)
       {
          string command;
-         Debug.Assert(loRaClass != LoRaClass.Undefined);
+         if (loRaClass == LoRaClass.Undefined)
+         {
+            throw new ArgumentException("Invalid LoRaWAN device class", "loRaClass");
+         }
 
          switch (loRaClass)
          {
@@ -182,7 +213,10 @@ namespace devMobile.IoT.LoRaWan
       public Result Confirm(LoRaConfirmType loRaConfirmType)
       {
          string command;
-         Debug.Assert(loRaConfirmType != LoRaConfirmType.Undefined);
+         if (loRaConfirmType == LoRaConfirmType.Undefined)
+         {
+            throw new ArgumentException("Invalid LoRaWAN confirmation type", "loRaConfirmType");
+         }
 
          switch (loRaConfirmType)
          {
@@ -220,8 +254,6 @@ namespace devMobile.IoT.LoRaWan
 
       public Result Region(string regionID)
       {
-         Debug.Assert(!string.IsNullOrEmpty(regionID));
-
          if (regionID.Length != RegionIDLength)
          {
             throw new ArgumentException($"RegionID {regionID} length {regionID.Length} invalid", "regionID");
@@ -317,19 +349,16 @@ namespace devMobile.IoT.LoRaWan
       public Result AbpInitialise(string devAddr, string nwksKey, string appsKey)
       {
          Result result;
-         Debug.Assert(!string.IsNullOrEmpty(devAddr));
-         Debug.Assert(!string.IsNullOrEmpty(nwksKey));
-         Debug.Assert(!string.IsNullOrEmpty(appsKey));
 
-         if (devAddr.Length != DevAddrLength)
+         if ((devAddr == null) || (devAddr.Length != DevAddrLength))
          {
             throw new ArgumentException($"devAddr invalid length must be {DevAddrLength} characters", "devAddr");
          }
-         if (nwksKey.Length != NwsKeyLength)
+         if ((nwksKey == null) || (nwksKey.Length != NwsKeyLength))
          {
             throw new ArgumentException($"nwsKey invalid length must be {NwsKeyLength} characters", "nwsKey");
          }
-         if (appsKey.Length != AppsKeyLength)
+         if ((appsKey == null) || (appsKey.Length != AppsKeyLength))
          {
             throw new ArgumentException($"appsKey invalid length must be {AppsKeyLength} characters", "appsKey");
          }
@@ -405,19 +434,16 @@ namespace devMobile.IoT.LoRaWan
       public Result OtaaInitialise(string devEui, string appEui, string appKey)
       {
          Result result;
-         Debug.Assert(!string.IsNullOrEmpty(devEui));
-         Debug.Assert(!string.IsNullOrEmpty(appEui));
-         Debug.Assert(!string.IsNullOrEmpty(appKey));
 
-         if (devEui.Length != DevEuiLength)
+         if ((devEui == null) || (devEui.Length != DevEuiLength))
          {
             throw new ArgumentException($"devEui invalid length must be {DevEuiLength} characters", "devEui");
          }
-         if (appEui.Length != AppEuiLength)
+         if ((appEui == null) || (appEui.Length != AppEuiLength))
          {
             throw new ArgumentException($"appEui invalid length must be {AppEuiLength} characters", "appEui");
          }
-         if (appKey.Length != AppKeyLength)
+         if ((appKey == null) || (appKey.Length != AppKeyLength))
          {
             throw new ArgumentException($"appKey invalid length must be {AppKeyLength} characters", "appKey");
          }
@@ -494,6 +520,11 @@ namespace devMobile.IoT.LoRaWan
       {
          Result result;
 
+         if ((timeout < JoinTimeoutMinimum) || (timeout > JoinTimeoutMaximum))
+         {
+            throw new ArgumentException($"timeout invalid must be greater than or equal to  {JoinTimeoutMinimum.TotalSeconds} seconds and less than or equal to {JoinTimeoutMaximum.TotalSeconds} seconds", "timeout");
+         }
+
          // Join the network
 #if DIAGNOSTICS
          Debug.WriteLine($" {DateTime.UtcNow:hh:mm:ss} join");
@@ -513,16 +544,20 @@ namespace devMobile.IoT.LoRaWan
       public Result Send(ushort port, string payload, TimeSpan timeout)
       {
          Result result;
-         Debug.Assert(!String.IsNullOrEmpty(payload));
 
          if ((port < MessagePortMinimumValue) || (port > MessagePortMaximumValue))
          {
             throw new ArgumentException($"port invalid must be greater than or equal to {MessagePortMinimumValue} and less than or equal to {MessagePortMaximumValue}", "port");
          }
 
-         if ((payload.Length < MessageBcdMinimumLength) || (payload.Length > MessageBcdMaximumLength))
+         if ((payload == null) || (payload.Length < MessageBcdMinimumLength) || (payload.Length > MessageBcdMaximumLength))
          {
             throw new ArgumentException($"payload invalid length must be greater than or equal to  {MessageBcdMinimumLength} and less than or equal to {MessageBcdMaximumLength} BCD characters long", "payload");
+         }
+
+         if ((timeout < SendTimeoutMinimum) || (timeout > SendTimeoutMaximum))
+         {
+            throw new ArgumentException($"timeout invalid must be greater than or equal to  {SendTimeoutMinimum.TotalSeconds} seconds and less than or equal to {SendTimeoutMaximum.TotalSeconds} seconds", "timeout");
          }
 
          // Send message the network
@@ -543,7 +578,6 @@ namespace devMobile.IoT.LoRaWan
 
       public Result Send(ushort port, byte[] payloadBytes, TimeSpan timeout)
       {
-         Debug.Assert(payloadBytes != null);
          Result result;
 
          if ((port < MessagePortMinimumValue) || (port > MessagePortMaximumValue))
@@ -551,15 +585,20 @@ namespace devMobile.IoT.LoRaWan
             throw new ArgumentException($"port invalid must be greater than or equal to {MessagePortMinimumValue} and less than or equal to {MessagePortMaximumValue}", "port");
          }
 
-         if ((payloadBytes.Length < MessageBytesMinimumLength) || (payloadBytes.Length > MessageBytesMaximumLength))
+         if ((payloadBytes == null) || (payloadBytes.Length < MessageBytesMinimumLength) || (payloadBytes.Length > MessageBytesMaximumLength))
          {
             throw new ArgumentException($"payload invalid length must be greater than or equal to {MessageBytesMinimumLength} and less than or equal to {MessageBytesMaximumLength} bytes long", "payloadBytes");
+         }
+
+         if ((timeout < SendTimeoutMinimum) || (timeout > SendTimeoutMaximum))
+         {
+            throw new ArgumentException($"timeout invalid must be greater than or equal to  {SendTimeoutMinimum.TotalSeconds} seconds and less than or equal to {SendTimeoutMaximum.TotalSeconds} seconds", "timeout");
          }
 
          string payloadBcd = Rak811LoRaWanDevice.BytesToBcd(payloadBytes);
 
          // Send message the network
-#if DIAGNOSTICS 
+#if DIAGNOSTICS
          Debug.WriteLine($" {DateTime.UtcNow:hh:mm:ss} Send port:{port} payload {payloadBcd} timeout {timeout.TotalSeconds} seconds");
 #endif
          result = SendCommand("OK", $"at+send=lora:{port}:{payloadBcd}", timeout);
@@ -576,16 +615,17 @@ namespace devMobile.IoT.LoRaWan
 
       private Result SendCommand(string expectedResponse, string command, TimeSpan timeout)
       {
-         Debug.Assert(expectedResponse != null);
-         Debug.Assert(command != null);
-
-         if (string.IsNullOrEmpty(expectedResponse))
+         if ((expectedResponse == null) || (expectedResponse == string.Empty))
          {
             throw new ArgumentException($"expectedResponse invalid length cannot be empty", "expectedResponse");
          }
-         if (string.IsNullOrEmpty(command))
+         if ((command == null) || (command == string.Empty))
          {
             throw new ArgumentException($"command invalid length cannot be empty", "command");
+         }
+         if ((timeout < SendTimeoutMinimum) || (timeout > SendTimeoutMaximum))
+         {
+            throw new ArgumentException($"timeout invalid must be greater than or equal to  {SendTimeoutMinimum.TotalSeconds} seconds and less than or equal to {SendTimeoutMaximum.TotalSeconds} seconds", "timeout");
          }
 
          this.atCommandExpectedResponse = expectedResponse;
@@ -606,7 +646,7 @@ namespace devMobile.IoT.LoRaWan
       {
          Result result;
          ushort errorNumber;
-         Debug.Assert(!String.IsNullOrEmpty(errorText));
+         Debug.Assert((errorText == null) || (errorText == string.Empty));
 
          try
          {
@@ -751,7 +791,7 @@ namespace devMobile.IoT.LoRaWan
                   string errorNumber = line.Substring(errorIndex + ErrorMarker.Length);
 
                   result = ModemErrorParser(errorNumber.Trim());
-               atExpectedEvent.Set();
+                  atExpectedEvent.Set();
                }
 
                if (atCommandExpectedResponse != string.Empty)
@@ -809,7 +849,8 @@ namespace devMobile.IoT.LoRaWan
 
       public static byte[] BcdToByes(string payloadBcd)
       {
-         Debug.Assert(!String.IsNullOrEmpty(payloadBcd));
+         Debug.Assert(payloadBcd != null);
+         Debug.Assert(payloadBcd != String.Empty);
          Debug.Assert(payloadBcd.Length % 2 == 0);
          Byte[] payloadBytes = new byte[payloadBcd.Length / 2];
          string digits = "0123456789ABCDEF";
