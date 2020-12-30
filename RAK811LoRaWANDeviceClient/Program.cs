@@ -97,7 +97,7 @@ namespace devMobile.IoT.Rak811LoRaWanDeviceClient
 
 #if CONFIRMED
                Debug.WriteLine($"{DateTime.UtcNow:hh:mm:ss} Confirmed");
-               result = device.Confirm(LoRaConfirmType.Confirmed);
+               result = device.Confirm(LoRaConfirmType.Unconfirmed);
                if (result != Result.Success)
                {
                   Debug.WriteLine($"Confirm on failed {result}");
@@ -168,7 +168,7 @@ namespace devMobile.IoT.Rak811LoRaWanDeviceClient
                      return;
                   }
 
-                  Thread.Sleep(30000);
+                  Thread.Sleep(300000);
 
                   Debug.WriteLine($"{DateTime.UtcNow:hh:mm:ss} Wakeup");
                   result = device.Wakeup();
