@@ -37,7 +37,6 @@ namespace devMobile.IoT.Rak811LoRaWanDeviceClient
       private const string SerialPortId = SC20100.UartPort.Uart5;
 #endif
 #if OTAA
-      private const string DevEui = "...";
       private const string AppEui = "...";
       private const string AppKey = "...";
 #endif
@@ -115,7 +114,7 @@ namespace devMobile.IoT.Rak811LoRaWanDeviceClient
 
 #if OTAA
                Debug.WriteLine($"{DateTime.UtcNow:hh:mm:ss} OTAA");
-               result = device.OtaaInitialise(DevEui, AppEui, AppKey);
+               result = device.OtaaInitialise(AppEui, AppKey);
                if (result != Result.Success)
                {
                   Debug.WriteLine($"OTAA Initialise failed {result}");

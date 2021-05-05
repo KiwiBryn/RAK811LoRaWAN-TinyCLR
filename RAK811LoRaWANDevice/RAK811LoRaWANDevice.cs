@@ -431,14 +431,10 @@ namespace devMobile.IoT.LoRaWan
          return Result.Success;
       }
 
-      public Result OtaaInitialise(string devEui, string appEui, string appKey)
+      public Result OtaaInitialise(string appEui, string appKey)
       {
          Result result;
 
-         if ((devEui == null) || (devEui.Length != DevEuiLength))
-         {
-            throw new ArgumentException($"devEui invalid length must be {DevEuiLength} characters", "devEui");
-         }
          if ((appEui == null) || (appEui.Length != AppEuiLength))
          {
             throw new ArgumentException($"appEui invalid length must be {AppEuiLength} characters", "appEui");
@@ -470,19 +466,6 @@ namespace devMobile.IoT.LoRaWan
          {
 #if DIAGNOSTICS
             Debug.WriteLine($" {DateTime.UtcNow:hh:mm:ss} lora:join_mode failed {result}");
-#endif
-            return result;
-         }
-
-         // set the devEUI
-#if DIAGNOSTICS
-         Debug.WriteLine($" {DateTime.UtcNow:hh:mm:ss} lora:dev_eui:{devEui}");
-#endif
-         result = SendCommand("OK", $"at+set_config=lora:dev_eui:{devEui}", CommandTimeoutDefault);
-         if (result != Result.Success)
-         {
-#if DIAGNOSTICS
-            Debug.WriteLine($" {DateTime.UtcNow:hh:mm:ss} lora:dev_eui failed {result}");
 #endif
             return result;
          }
@@ -646,7 +629,6 @@ namespace devMobile.IoT.LoRaWan
       {
          Result result;
          ushort errorNumber;
-         Debug.Assert((errorText == null) || (errorText == string.Empty));
 
          try
          {
