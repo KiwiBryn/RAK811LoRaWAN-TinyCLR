@@ -176,6 +176,9 @@ namespace devMobile.IoT.Rak811LoRaWanDeviceClient
                      Debug.WriteLine($"Wakeup failed {result}");
                      return;
                   }
+
+                  // if we send to it fails
+                  Thread.Sleep(5000);
                }
             }
          }

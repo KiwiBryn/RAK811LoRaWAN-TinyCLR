@@ -173,10 +173,6 @@ namespace devMobile.IoT.LoRaWan
       public Result Class(LoRaClass loRaClass)
       {
          string command;
-         if (loRaClass == LoRaClass.Undefined)
-         {
-            throw new ArgumentException("Invalid LoRaWAN device class", "loRaClass");
-         }
 
          switch (loRaClass)
          {
@@ -213,10 +209,6 @@ namespace devMobile.IoT.LoRaWan
       public Result Confirm(LoRaConfirmType loRaConfirmType)
       {
          string command;
-         if (loRaConfirmType == LoRaConfirmType.Undefined)
-         {
-            throw new ArgumentException("Invalid LoRaWAN confirmation type", "loRaConfirmType");
-         }
 
          switch (loRaConfirmType)
          {
@@ -363,19 +355,6 @@ namespace devMobile.IoT.LoRaWan
             throw new ArgumentException($"appsKey invalid length must be {AppsKeyLength} characters", "appsKey");
          }
 
-         // Set the Working mode to LoRaWAN
-#if DIAGNOSTICS
-         Debug.WriteLine($" {DateTime.UtcNow:hh:mm:ss} lora:work_mode LoRaWAN");
-#endif
-         result = SendCommand("Initialization OK", "at+set_config=lora:work_mode:0", CommandTimeoutDefault);
-         if (result != Result.Success)
-         {
-#if DIAGNOSTICS
-            Debug.WriteLine($" {DateTime.UtcNow:hh:mm:ss} lora:work_mode failed {result}");
-#endif
-            return result;
-         }
-
          // Set the JoinMode to ABP
 #if DIAGNOSTICS
          Debug.WriteLine($" {DateTime.UtcNow:hh:mm:ss} lora:join_mode:1");
@@ -442,19 +421,6 @@ namespace devMobile.IoT.LoRaWan
          if ((appKey == null) || (appKey.Length != AppKeyLength))
          {
             throw new ArgumentException($"appKey invalid length must be {AppKeyLength} characters", "appKey");
-         }
-
-         // Set the Working mode to LoRaWAN
-#if DIAGNOSTICS
-         Debug.WriteLine($" {DateTime.UtcNow:hh:mm:ss} lora:work_mode LoRaWAN");
-#endif
-         result = SendCommand("Initialization OK", "at+set_config=lora:work_mode:0", CommandTimeoutDefault);
-         if (result != Result.Success)
-         {
-#if DIAGNOSTICS
-            Debug.WriteLine($" {DateTime.UtcNow:hh:mm:ss} lora:work_mode failed {result}");
-#endif
-            return result;
          }
 
          // Set the JoinMode to OTAA
