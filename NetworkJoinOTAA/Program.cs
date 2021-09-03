@@ -29,7 +29,6 @@ namespace devMobile.IoT.Rak811.NetworkJoinOTAA
 #if TINYCLR_V2_FEZDUINO
       private static string SerialPortId = SC20100.UartPort.Uart5;
 #endif
-      private const string DevEui = "...";
       private const string AppEui = "...";
       private const string AppKey = "...";
       private const byte messagePort = 1;
@@ -102,24 +101,10 @@ namespace devMobile.IoT.Rak811.NetworkJoinOTAA
                serialDevice.Read(rxBuffer);
                Debug.WriteLine($"RX :{UTF8Encoding.UTF8.GetString(rxBuffer)}");
             }
-
+   
             // Set the JoinMode
             txByteCount = serialDevice.Write(UTF8Encoding.UTF8.GetBytes("at+set_config=lora:join_mode:0\r\n"));
             Debug.WriteLine($"TX: join_mode {txByteCount} bytes");
-            Thread.Sleep(500);
-
-            // Read the response
-            rxByteCount = serialDevice.BytesToRead;
-            if (rxByteCount > 0)
-            {
-               byte[] rxBuffer = new byte[rxByteCount];
-               serialDevice.Read(rxBuffer);
-               Debug.WriteLine($"RX :{UTF8Encoding.UTF8.GetString(rxBuffer)}");
-            }
-
-            // OTAA set the devEUI
-            txByteCount = serialDevice.Write(UTF8Encoding.UTF8.GetBytes($"at+set_config=lora:dev_eui:{DevEui}\r\n"));
-            Debug.WriteLine($"TX: dev_eui: {txByteCount} bytes");
             Thread.Sleep(500);
 
             // Read the response
